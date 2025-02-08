@@ -47,32 +47,54 @@ export const getCategories = createAsyncThunk(
 export const createCategory = createAsyncThunk(
   "categories/createCategory",
   async (categoryData: Categories) => {
-    const response = await fetch(`${baseUrl}/categories`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(categoryData),
-    });
-    if (!response.ok) {
-      throw new Error("Failed to create category");
+    try {
+      const response = await axios.post(`${baseUrl}/categories`, categoryData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      return response.data;
+    } catch (error) {
+      throw new Error("an erroe occured creating category", error);
     }
-    const data = await response.json();
-    return data;
+  },
+);
+
+export const updateCategory = createAsyncThunk(
+  "categories/updateCategory",
+  async ({ categoryData, id }: { categoryData: Categories; id: number }) => {
+    try {
+      const response = await axios.put(
+        `${baseUrl}/categories/${id}`,
+        categoryData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            Authorization: `Bearer ${token}`,
+          },
+        },
+      );
+      return response.data;
+    } catch (error) {
+      throw new Error("an erroe occured updating category", error);
+    }
   },
 );
 
 export const deleteCategory = createAsyncThunk(
   "categories/deleteCategory",
   async (id: number) => {
-    const response = await fetch(`${baseUrl}/categories/${id}`, {
-      method: "DELETE",
-    });
-    if (!response.ok) {
-      throw new Error("Failed to delete category");
+    try {
+      const response = await axios.delete(`${baseUrl}/categories/${id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      return response.data;
+    } catch (error) {
+      throw new Error("error occured deleting category", error);
     }
-    const data = await response.json();
-    return data;
   },
 );
 
@@ -105,6 +127,19 @@ const categoriesSlice = createSlice({
         state.error = "";
       })
       .addCase(createCategory.rejected, (state) => {
+        state.loading = false;
+        state.error = "Something went wrong";
+      })
+      //update category
+      .addCase(updateCategory.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(updateCategory.fulfilled, (state, action) => {
+        state.categories.categories.push(action.payload);
+        state.loading = false;
+        state.error = "";
+      })
+      .addCase(updateCategory.rejected, (state) => {
         state.loading = false;
         state.error = "Something went wrong";
       })
