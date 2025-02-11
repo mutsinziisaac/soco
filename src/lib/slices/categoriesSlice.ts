@@ -46,7 +46,7 @@ export const getCategories = createAsyncThunk(
 
 export const createCategory = createAsyncThunk(
   "categories/createCategory",
-  async (categoryData: Categories) => {
+  async (categoryData: FormData) => {
     try {
       const response = await axios.post(`${baseUrl}/categories`, categoryData, {
         headers: {

@@ -21,14 +21,12 @@ import {
   SheetHeader,
   SheetTitle,
   SheetTrigger,
-  SheetFooter,
 } from "@/components/ui/sheet";
 
 import { useAppSelector, useAppDispatch } from "@/lib/hooks";
 import { removeItem, totalPrice } from "@/lib/slices/cartSlice";
 import { Button } from "@/components/ui/button";
 import { useEffect, useState } from "react";
-import { useAuth0 } from "@auth0/auth0-react";
 import { toast } from "sonner";
 
 export default function HomeLayout({
@@ -45,27 +43,6 @@ export default function HomeLayout({
     dispatch(removeItem(productId));
     dispatch(totalPrice());
   };
-
-  const { getAccessTokenSilently } = useAuth0();
-
-  useEffect(() => {
-    const fetchToken = async () => {
-      // Check if token exists in localStorage
-      try {
-        localStorage.removeItem("ACT");
-        const token = await getAccessTokenSilently({
-          authorizationParams: {
-            audience: "http://localhost:4000",
-          },
-        });
-        localStorage.setItem("ACT", token);
-      } catch (err) {
-        return;
-      }
-    };
-
-    fetchToken();
-  }, []);
 
   return (
     <body className="relative">

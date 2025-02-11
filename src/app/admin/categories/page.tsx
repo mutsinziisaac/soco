@@ -1,27 +1,9 @@
 "use client";
-import Image from "next/image";
-import Link from "next/link";
-import {
-  File,
-  Home,
-  LineChart,
-  ListFilter,
-  MoreHorizontal,
-  Package,
-  Package2,
-  PanelLeft,
-  PlusCircle,
-  Search,
-  Settings,
-  ShoppingCart,
-  Users2,
-} from "lucide-react";
+import { File, MoreHorizontal, PlusCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
-  DialogDescription,
-  DialogFooter,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
@@ -36,11 +18,9 @@ import {
 } from "@/components/ui/card";
 import {
   DropdownMenu,
-  DropdownMenuCheckboxItem,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuLabel,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import {
@@ -75,7 +55,13 @@ import { Input } from "@/components/ui/input";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { useDispatch, useSelector } from "react-redux";
+import {
+  FileInput,
+  FileUploader,
+  FileUploaderContent,
+  FileUploaderItem,
+} from "@/components/ui/file-upload";
+import { CloudUpload, Paperclip } from "lucide-react";
 import { useEffect, useState } from "react";
 import {
   getCategories,
@@ -84,19 +70,25 @@ import {
 } from "@/lib/slices/categoriesSlice";
 import { useAppDispatch, useAppSelector } from "@/lib/hooks";
 import { toast } from "sonner";
+import Image from "next/image";
 
 const formSchema = z.object({
   name: z.string().min(3, { message: "name must be at least 3 characters" }),
   description: z
     .string()
     .min(3, { message: "Description must be at least 3 characters" }),
+  file: z.string().optional(),
 });
 
 function Categories() {
   const dispatch = useAppDispatch();
   const { categories, loading, error } = useAppSelector(
-    (state: any) => state.categories
+    (state: any) => state.categories,
   );
+  const dropZoneConfig = {
+    maxSize: 1024 * 1024 * 4,
+    multiple: false,
+  };
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -105,13 +97,24 @@ function Categories() {
     },
   });
 
+  const [file, setFile] = useState<File>();
+
   useEffect(() => {
     dispatch(getCategories());
   }, [dispatch]);
 
   const onSubmit = async (data: z.infer<typeof formSchema>) => {
+    const formData = new FormData();
+    formData.append("name", data.name);
+    formData.append("description", data.description);
+    if (file) {
+      formData.append("file", file);
+    } else {
+      console.error("No file selected");
+    }
+
     try {
-      await dispatch(createCategory(data)).unwrap();
+      await dispatch(createCategory(formData)).unwrap();
       toast.success("Category created successfully");
       form.reset();
     } catch (error) {
@@ -188,6 +191,54 @@ function Categories() {
                       )}
                     />
 
+                    <FormField
+                      control={form.control}
+                      name="file"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Image</FormLabel>
+                          <FormControl>
+                            <FileUploader
+                              value={file}
+                              onValueChange={setFile}
+                              dropzoneOptions={dropZoneConfig}
+                              className="relative bg-background rounded-lg p-2"
+                            >
+                              <FileInput
+                                id="fileInput"
+                                className="outline-dashed outline-1 outline-slate-500"
+                              >
+                                <div className="flex items-center justify-center flex-col p-8 w-full">
+                                  <CloudUpload className="text-gray-500 w-10 h-10" />
+                                  <p className="mb-1 text-sm text-gray-500 dark:text-gray-400">
+                                    <span className="font-semibold">
+                                      Click to upload
+                                    </span>
+                                    &nbsp; or drag and drop
+                                  </p>
+                                  <p className="text-xs text-gray-500 dark:text-gray-400">
+                                    SVG, PNG, JPG or GIF
+                                  </p>
+                                </div>
+                              </FileInput>
+                              <FileUploaderContent>
+                                {file && (
+                                  <FileUploaderItem key="image">
+                                    <Paperclip className="h-4 w-4 stroke-current" />
+                                    <span>{file.name}</span>
+                                  </FileUploaderItem>
+                                )}
+                              </FileUploaderContent>
+                            </FileUploader>
+                          </FormControl>
+                          <FormDescription>
+                            Select a file to upload.
+                          </FormDescription>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+
                     <Button type="submit">Submit</Button>
                   </form>
                 </Form>
@@ -205,6 +256,7 @@ function Categories() {
           <Table>
             <TableHeader>
               <TableRow>
+                <TableHead></TableHead>
                 <TableHead>Name</TableHead>
                 <TableHead>Description</TableHead>
                 <TableHead>Products</TableHead>
@@ -216,6 +268,15 @@ function Categories() {
             <TableBody>
               {categories?.categories?.map((category: any) => (
                 <TableRow key={category?.id}>
+                  <TableCell className="hidden sm:table-cell">
+                    <Image
+                      alt="Product image"
+                      className="aspect-square rounded-md object-cover"
+                      height="64"
+                      src={category?.image || "/noimage.jpeg"}
+                      width="64"
+                    />
+                  </TableCell>
                   <TableCell className="font-medium">
                     {category?.name}
                   </TableCell>
