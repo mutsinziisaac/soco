@@ -72,6 +72,7 @@ import {
 import { useAppDispatch, useAppSelector } from "@/lib/hooks";
 import { toast } from "sonner";
 import { Input } from "@/components/ui/input";
+import { useState } from "react";
 
 const formSchema = z.object({
   name: z.string().min(3, { message: "name must be at least 3 characters" }),
@@ -88,6 +89,8 @@ const formSchema = z.object({
 function Users() {
   const dispatch = useAppDispatch();
   const { users } = useAppSelector((state: any) => state.users);
+  const [open, setOpen] = useState(false);
+  const [updateId, setUpdateId] = useState<number | null>(null);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -100,12 +103,35 @@ function Users() {
     },
   });
 
+  const setUpdateForm = (
+    name: string,
+    tel: string,
+    email: string,
+    role: string,
+    password: string,
+  ) => {
+    form.reset({
+      name: name,
+      tel: tel,
+      password: password,
+      email: email,
+      role: role,
+    });
+  };
+
   const onSubmit = async (data: z.infer<typeof formSchema>) => {
-    console.log("usss");
     try {
-      await dispatch(createUser(data)).unwrap();
-      toast.success("User created successfully");
+      if (updateId) {
+        await dispatch(updateUser({ userData: data, updateId })).unwrap();
+        toast.success("User updated successfully");
+      } else {
+        await dispatch(createUser(data)).unwrap();
+        toast.success("User created successfully");
+      }
+
       form.reset();
+      setUpdateId(null);
+      setOpen(false);
     } catch (error) {
       toast.error("Something went wrong");
     }
@@ -142,9 +168,21 @@ function Users() {
                 Export
               </span>
             </Button>
-            <Dialog>
+            <Dialog open={open} onOpenChange={setOpen}>
               <DialogTrigger asChild>
-                <Button size="sm" className="h-7 gap-1">
+                <Button
+                  size="sm"
+                  className="h-7 gap-1"
+                  onClick={() =>
+                    form.reset({
+                      name: "",
+                      tel: "",
+                      email: "",
+                      password: "",
+                      role: "admin",
+                    })
+                  }
+                >
                   <PlusCircle className="h-3.5 w-3.5" />
                   <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
                     Add User
@@ -153,7 +191,9 @@ function Users() {
               </DialogTrigger>
               <DialogContent className="sm:max-w-[425px]">
                 <DialogHeader>
-                  <DialogTitle>Add User</DialogTitle>
+                  <DialogTitle>
+                    {updateId ? "Update User" : "Add User"}
+                  </DialogTitle>
                 </DialogHeader>
                 <div className="grid gap-4 py-4">
                   <Form {...form}>
@@ -248,8 +288,8 @@ function Users() {
                         disabled={form.formState.isSubmitting}
                       >
                         {form.formState.isSubmitting
-                          ? "Creating..."
-                          : "Create User"}
+                          ? "Submitting..."
+                          : "Submit"}
                       </Button>
                     </form>
                   </Form>
@@ -290,11 +330,11 @@ function Users() {
                     <TableRow key={user?.id}>
                       <TableCell className="hidden sm:table-cell">
                         <div
-                          className={`aspect-square rounded-full object-cover h-12 w-12 justify-items-center content-center ${user?.image}`}
+                          className={`aspect-square rounded-full h-12 w-12 flex items-center justify-center ${user?.image}`}
                         >
-                          <p className="text-xl font-bold text-white">
-                            {user?.name.charAt(0).toUpperCase()}
-                          </p>
+                          <span className="text-white font-bold">
+                            {user?.name?.charAt(0).toUpperCase()}
+                          </span>
                         </div>
                       </TableCell>
                       <TableCell className="font-medium">
@@ -324,7 +364,21 @@ function Users() {
                             <DropdownMenuContent align="end">
                               <DropdownMenuLabel>Actions</DropdownMenuLabel>
 
-                              <DropdownMenuItem>Edit</DropdownMenuItem>
+                              <DropdownMenuItem
+                                onClick={() => {
+                                  setUpdateForm(
+                                    user?.name,
+                                    user?.tel,
+                                    user?.email,
+                                    user?.role,
+                                    user?.password,
+                                  );
+                                  setOpen(true);
+                                  setUpdateId(user?.id);
+                                }}
+                              >
+                                Edit
+                              </DropdownMenuItem>
 
                               <AlertDialogTrigger asChild>
                                 <DropdownMenuItem>Delete</DropdownMenuItem>
