@@ -4,6 +4,7 @@ import categoriesSlice from "./slices/categoriesSlice";
 import orderSlice from "./slices/orderSlice";
 import storefront from "./slices/storefront";
 import cartSlice from "./slices/cartSlice";
+import usersSlice from "./slices/usersSlice";
 
 export const makeStore = () => {
   return configureStore({
@@ -13,6 +14,7 @@ export const makeStore = () => {
       orders: orderSlice,
       sfProducts: storefront,
       cart: cartSlice,
+      users: usersSlice,
     },
   });
 };

@@ -67,12 +67,21 @@ import {
   getCategories,
   deleteCategory,
   createCategory,
+  updateCategory,
 } from "@/lib/slices/categoriesSlice";
 import { useAppDispatch, useAppSelector } from "@/lib/hooks";
 import { toast } from "sonner";
 import Image from "next/image";
 
 const formSchema = z.object({
+  name: z.string().min(3, { message: "name must be at least 3 characters" }),
+  description: z
+    .string()
+    .min(3, { message: "Description must be at least 3 characters" }),
+  file: z.string().optional(),
+});
+
+const updateFormSchema = z.object({
   name: z.string().min(3, { message: "name must be at least 3 characters" }),
   description: z
     .string()
@@ -97,11 +106,27 @@ function Categories() {
     },
   });
 
-  const [file, setFile] = useState<File>();
+  const updateForm = useForm<z.infer<typeof updateFormSchema>>({
+    resolver: zodResolver(updateFormSchema),
+    defaultValues: {
+      name: "",
+      description: "",
+    },
+  });
+
+  const [file, setFile] = useState<File | null>();
+  const [updateId, setUpdateId] = useState<number | null>();
 
   useEffect(() => {
     dispatch(getCategories());
   }, [dispatch]);
+
+  const setUpdateData = (name: string, description: string) => {
+    updateForm.reset({
+      name: name,
+      description: description,
+    });
+  };
 
   const onSubmit = async (data: z.infer<typeof formSchema>) => {
     const formData = new FormData();
@@ -117,6 +142,31 @@ function Categories() {
       await dispatch(createCategory(formData)).unwrap();
       toast.success("Category created successfully");
       form.reset();
+      setFile(null);
+    } catch (error) {
+      toast.error("Something went wrong");
+    }
+  };
+
+  const onUpdateSubmit = async (data: z.infer<typeof updateFormSchema>) => {
+    const formData = new FormData();
+    formData.append("name", data.name);
+    formData.append("description", data.description);
+    if (file) {
+      formData.append("file", file);
+    } else {
+      console.error("No file selected");
+    }
+
+    try {
+      await dispatch(updateCategory({ formData, updateId })).unwrap();
+      toast.success("Category Updated successfully");
+      updateForm.reset({
+        name: "",
+        description: "",
+      });
+      setUpdateId(null);
+      setFile(null);
     } catch (error) {
       toast.error("Something went wrong");
     }
@@ -283,50 +333,161 @@ function Categories() {
                   <TableCell>{category?.description}</TableCell>
                   <TableCell>{category?._count?.products}</TableCell>
                   <TableCell>
-                    <AlertDialog>
-                      <DropdownMenu>
-                        <DropdownMenuTrigger asChild>
-                          <Button
-                            aria-haspopup="true"
-                            size="icon"
-                            variant="ghost"
-                          >
-                            <MoreHorizontal className="h-4 w-4" />
-                            <span className="sr-only">Toggle menu</span>
-                          </Button>
-                        </DropdownMenuTrigger>
-                        <DropdownMenuContent align="end">
-                          <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                          <DropdownMenuItem>Edit</DropdownMenuItem>
-                          <AlertDialogTrigger asChild>
-                            <DropdownMenuItem>Delete</DropdownMenuItem>
-                          </AlertDialogTrigger>
-                        </DropdownMenuContent>
-                      </DropdownMenu>
-                      <AlertDialogContent>
-                        <AlertDialogHeader>
-                          <AlertDialogTitle>
-                            Are you absolutely sure?
-                          </AlertDialogTitle>
-                          <AlertDialogDescription>
-                            This action cannot be undone. This will permanently
-                            delete the Category and remove its data from the
-                            servers.
-                          </AlertDialogDescription>
-                        </AlertDialogHeader>
-                        <AlertDialogFooter>
-                          <AlertDialogCancel>Cancel</AlertDialogCancel>
-                          <AlertDialogAction
-                            className="bg-red-600 hover:bg-red-500"
-                            onClick={() => {
-                              handleDeleteCategory(category?.id);
-                            }}
-                          >
-                            Continue
-                          </AlertDialogAction>
-                        </AlertDialogFooter>
-                      </AlertDialogContent>
-                    </AlertDialog>
+                    <Dialog>
+                      <AlertDialog>
+                        <DropdownMenu>
+                          <DropdownMenuTrigger asChild>
+                            <Button
+                              aria-haspopup="true"
+                              size="icon"
+                              variant="ghost"
+                            >
+                              <MoreHorizontal className="h-4 w-4" />
+                              <span className="sr-only">Toggle menu</span>
+                            </Button>
+                          </DropdownMenuTrigger>
+                          <DropdownMenuContent align="end">
+                            <DropdownMenuLabel>Actions</DropdownMenuLabel>
+                            <DialogTrigger asChild>
+                              <DropdownMenuItem
+                                onClick={() => {
+                                  setUpdateId(category?.id);
+                                  setUpdateData(
+                                    category?.name,
+                                    category?.description,
+                                  );
+                                }}
+                              >
+                                Edit
+                              </DropdownMenuItem>
+                            </DialogTrigger>
+                            <AlertDialogTrigger asChild>
+                              <DropdownMenuItem>Delete</DropdownMenuItem>
+                            </AlertDialogTrigger>
+                          </DropdownMenuContent>
+                        </DropdownMenu>
+                        <AlertDialogContent>
+                          <AlertDialogHeader>
+                            <AlertDialogTitle>
+                              Are you absolutely sure?
+                            </AlertDialogTitle>
+                            <AlertDialogDescription>
+                              This action cannot be undone. This will
+                              permanently delete the Category and remove its
+                              data from the servers.
+                            </AlertDialogDescription>
+                          </AlertDialogHeader>
+                          <AlertDialogFooter>
+                            <AlertDialogCancel>Cancel</AlertDialogCancel>
+                            <AlertDialogAction
+                              className="bg-red-600 hover:bg-red-500"
+                              onClick={() => {
+                                handleDeleteCategory(category?.id);
+                              }}
+                            >
+                              Continue
+                            </AlertDialogAction>
+                          </AlertDialogFooter>
+                        </AlertDialogContent>
+                      </AlertDialog>
+                      <DialogContent className="sm:max-w-[425px]">
+                        <DialogHeader>
+                          <DialogTitle>Update Category</DialogTitle>
+                        </DialogHeader>
+                        <div className="grid gap-4 py-4">
+                          <Form {...updateForm}>
+                            <form
+                              onSubmit={updateForm.handleSubmit(onUpdateSubmit)}
+                              className="space-y-8"
+                            >
+                              <FormField
+                                control={updateForm.control}
+                                name="name"
+                                render={({ field }) => (
+                                  <FormItem>
+                                    <FormLabel>name</FormLabel>
+                                    <FormControl>
+                                      <Input
+                                        placeholder="Category Name"
+                                        {...field}
+                                      />
+                                    </FormControl>
+                                    <FormMessage />
+                                  </FormItem>
+                                )}
+                              />
+
+                              <FormField
+                                control={updateForm.control}
+                                name="description"
+                                render={({ field }) => (
+                                  <FormItem>
+                                    <FormLabel>Description</FormLabel>
+                                    <FormControl>
+                                      <Input
+                                        placeholder="Category Description"
+                                        {...field}
+                                      />
+                                    </FormControl>
+                                    <FormMessage />
+                                  </FormItem>
+                                )}
+                              />
+
+                              <FormField
+                                control={updateForm.control}
+                                name="file"
+                                render={({ field }) => (
+                                  <FormItem>
+                                    <FormLabel>Image</FormLabel>
+                                    <FormControl>
+                                      <FileUploader
+                                        value={file}
+                                        onValueChange={setFile}
+                                        dropzoneOptions={dropZoneConfig}
+                                        className="relative bg-background rounded-lg p-2"
+                                      >
+                                        <FileInput
+                                          id="fileInput"
+                                          className="outline-dashed outline-1 outline-slate-500"
+                                        >
+                                          <div className="flex items-center justify-center flex-col p-8 w-full">
+                                            <CloudUpload className="text-gray-500 w-10 h-10" />
+                                            <p className="mb-1 text-sm text-gray-500 dark:text-gray-400">
+                                              <span className="font-semibold">
+                                                Click to upload
+                                              </span>
+                                              &nbsp; or drag and drop
+                                            </p>
+                                            <p className="text-xs text-gray-500 dark:text-gray-400">
+                                              SVG, PNG, JPG or GIF
+                                            </p>
+                                          </div>
+                                        </FileInput>
+                                        <FileUploaderContent>
+                                          {file && (
+                                            <FileUploaderItem key="image">
+                                              <Paperclip className="h-4 w-4 stroke-current" />
+                                              <span>{file.name}</span>
+                                            </FileUploaderItem>
+                                          )}
+                                        </FileUploaderContent>
+                                      </FileUploader>
+                                    </FormControl>
+                                    <FormDescription>
+                                      Select a file to upload.
+                                    </FormDescription>
+                                    <FormMessage />
+                                  </FormItem>
+                                )}
+                              />
+
+                              <Button type="submit">Submit</Button>
+                            </form>
+                          </Form>
+                        </div>
+                      </DialogContent>
+                    </Dialog>
                   </TableCell>
                 </TableRow>
               ))}

@@ -5,16 +5,11 @@ import logo from "../../../public/soqologo.png";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
-  File,
   Home,
   LineChart,
-  ListFilter,
-  MoreHorizontal,
   Package,
   Package2,
   PanelLeft,
-  PlusCircle,
-  Search,
   Settings,
   ShoppingCart,
   Users2,
@@ -142,20 +137,6 @@ export default function AdminLayout({
                 </Link>
               </TooltipTrigger>
               <TooltipContent side="right">Users</TooltipContent>
-            </Tooltip>
-          </TooltipProvider>
-          <TooltipProvider>
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <Link
-                  href="#"
-                  className="flex h-9 w-9 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:text-foreground md:h-8 md:w-8"
-                >
-                  <LineChart className="h-5 w-5" />
-                  <span className="sr-only">Analytics</span>
-                </Link>
-              </TooltipTrigger>
-              <TooltipContent side="right">Analytics</TooltipContent>
             </Tooltip>
           </TooltipProvider>
         </nav>

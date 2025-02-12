@@ -63,11 +63,11 @@ export const createCategory = createAsyncThunk(
 
 export const updateCategory = createAsyncThunk(
   "categories/updateCategory",
-  async ({ categoryData, id }: { categoryData: Categories; id: number }) => {
+  async ({ formData, updateId }: { formData: FormData; updateId: any }) => {
     try {
       const response = await axios.put(
-        `${baseUrl}/categories/${id}`,
-        categoryData,
+        `${baseUrl}/categories/${updateId}`,
+        formData,
         {
           headers: {
             "Content-Type": "multipart/form-data",
@@ -135,7 +135,10 @@ const categoriesSlice = createSlice({
         state.loading = true;
       })
       .addCase(updateCategory.fulfilled, (state, action) => {
-        state.categories.categories.push(action.payload);
+        const index = state.categories.categories.findIndex(
+          (category) => category.id === action.payload.id,
+        );
+        state.categories.categories[index] = action.payload;
         state.loading = false;
         state.error = "";
       })
