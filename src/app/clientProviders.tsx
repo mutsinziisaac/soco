@@ -3,6 +3,7 @@
 import React from "react";
 import StoreProvider from "./storeProvider";
 import { Toaster } from "sonner";
+import SSEProvider from "./SSEProvider";
 
 export default function ClientProviders({
   children,
@@ -12,6 +13,7 @@ export default function ClientProviders({
   return (
     <StoreProvider>
       <Toaster position="top-right" richColors />
+      <SSEProvider />
       {children}
     </StoreProvider>
   );

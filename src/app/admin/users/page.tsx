@@ -337,9 +337,7 @@ function Users() {
                           </span>
                         </div>
                       </TableCell>
-                      <TableCell className="font-medium">
-                        {user?.name}
-                      </TableCell>
+                      <TableCell className="font-bold">{user?.name}</TableCell>
                       <TableCell>{user?.tel}</TableCell>
                       <TableCell>{user?.email}</TableCell>
                       <TableCell className="hidden md:table-cell">
