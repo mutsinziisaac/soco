@@ -53,15 +53,15 @@ type OrderStatus =
 function getBadge(status: OrderStatus) {
   switch (status) {
     case "Pending":
-      return "bg-yellow-500 text-primary-foreground";
+      return "bg-yellow-200 text-yellow-700";
     case "Confirmed":
-      return "bg-primary text-primary-foreground";
+      return "bg-green-200 text-green-600";
     case "Delivering":
-      return "bg-orange-400 text-primary-foreground";
+      return "bg-orange-200 text-orange-500";
     case "Completed":
-      return "bg-purple-400 text-primary-foreground";
+      return "bg-purple-200 text-purple-500";
     case "Cancelled":
-      return "bg-red-500 text-primary-foreground";
+      return "bg-red-200 text-red-500";
     default:
       return "bg-gray-300";
   }

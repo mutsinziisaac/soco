@@ -1,5 +1,4 @@
 "use client";
-import Image from "next/image";
 import { File, MoreHorizontal, PlusCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -149,6 +148,27 @@ function Users() {
       toast.error("Something went wrong");
     }
   };
+
+  type ProfileColor = "red" | "blue" | "green" | "yellow" | "purple" | "pink";
+
+  function profileColor(color: ProfileColor) {
+    switch (color) {
+      case "red":
+        return "bg-red-500";
+      case "blue":
+        return "bg-blue-500";
+      case "green":
+        return "bg-green-500";
+      case "yellow":
+        return "bg-yellow-500";
+      case "purple":
+        return "bg-purple-500";
+      case "pink":
+        return "bg-pink-500";
+      default:
+        return "bg-gray-300";
+    }
+  }
 
   return (
     <>
@@ -330,7 +350,7 @@ function Users() {
                     <TableRow key={user?.id}>
                       <TableCell className="hidden sm:table-cell">
                         <div
-                          className={`aspect-square rounded-full h-12 w-12 flex items-center justify-center ${user?.image}`}
+                          className={`aspect-square rounded-full h-12 w-12 flex items-center justify-center ${profileColor(user?.image)}`}
                         >
                           <span className="text-white font-bold">
                             {user?.name?.charAt(0).toUpperCase()}
