@@ -1,7 +1,6 @@
 "use client";
 
 import Image from "next/image";
-import logo from "../../../public/soqologo.png";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
@@ -38,13 +37,13 @@ export default function AdminLayout({
         <nav className="flex flex-col items-center gap-4 px-2 py-4">
           <Link
             href="/admin"
-            className="group flex h-12 w-12 shrink-0 items-center justify-center rounded-sm bg-primary text-lg font-semibold text-primary-foreground md:h-8 md:w-8 md:text-base"
+            className="group flex h-12 w-12 shrink-0 items-center justify-center rounded-sm text-lg font-semibold text-primary-foreground md:h-8 md:w-8 md:text-base"
           >
             <Image
               alt="logo"
               className="h-full w-full scale-150 rounded-sm"
               height="100"
-              src={logo}
+              src="/soqologo.png"
               width="100"
             />
             <span className="sr-only">Acme Inc</span>
