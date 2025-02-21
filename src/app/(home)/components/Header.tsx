@@ -9,14 +9,14 @@ export default function Header() {
           <div className="flex items-center">
             <Link href="/" className="flex items-center">
               <Image
-                className="h-56 w-full object-cover sm:h-72 md:h-96 lg:w-full lg:h-full rounded-md"
+                className="object-cover rounded-md sm:w-10 sm:h-6 md:w-28 md:h-28 lg:w-32 lg:h-28"
                 src="/soqologo-nobg.png"
                 alt="Grocery shopping made easy"
-                width={100}
-                height={100}
+                width={100} // Default width (can be overridden by Tailwind classes)
+                height={100} // Default height (can be overridden by Tailwind classes)
               />
             </Link>
-            <div className="hidden ml-10 space-x-8 lg:block">
+            <div className="hidden ml-10 space-x-8">
               <Link
                 href="#features"
                 className="text-base font-medium text-gray-500 hover:text-gray-900"

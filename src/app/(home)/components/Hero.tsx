@@ -49,7 +49,7 @@ export default function Hero() {
           </main>
         </div>
       </div>
-      <div className="lg:absolute lg:inset-y-0 lg:right-0 lg:w-1/2 z-10 flex relative m-4">
+      <div className="lg:absolute lg:inset-y-0 lg:right-0 lg:w-1/2 z-10 flex relative lg:pl-36 md:pl-16 pl-10">
         <div className="relative">
           <Iphone15Pro className="size-full" src="/iphoneimage.PNG" />
         </div>
