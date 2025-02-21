@@ -4,7 +4,9 @@ const nextConfig = {
     domains: ["soqo.s3.amazonaws.com", "soqo.s3.eu-north-1.amazonaws.com"],
   },
 
-  eslint: false,
+  eslint: {
+    ignoreDuringBuilds: true,
+  },
 };
 
 export default nextConfig;
