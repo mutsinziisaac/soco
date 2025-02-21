@@ -17,11 +17,7 @@ export default function Testimonials() {
           </p>
         </div>
         <div className="mt-20">
-          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 ">
-            <TweetCard id="1892559239593312464" />
-            <TweetCard id="1892560347371852110" className="h-fit" />
-            <TweetCard id="1892559239593312464" />
-          </div>
+          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 "></div>
         </div>
       </div>
     </section>
