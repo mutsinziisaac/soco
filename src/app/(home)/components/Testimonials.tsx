@@ -12,7 +12,7 @@ export default function Testimonials() {
             What our customers are saying
           </h2>
           <p className="mt-4 max-w-3xl mx-auto text-center text-xl text-gray-500">
-            Don't just take our word for it. Here's what some of our satisfied
+            Don`t just take our word for it. Here`s what some of our satisfied
             customers have to say about Soco.
           </p>
         </div>

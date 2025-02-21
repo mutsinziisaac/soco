@@ -91,8 +91,8 @@ const updateFormSchema = z.object({
 
 function Categories() {
   const dispatch = useAppDispatch();
-  const { categories, loading, error } = useAppSelector(
-    (state: any) => state.categories,
+  const { categories } = useAppSelector(
+    (state) => state.categories,
   );
   const dropZoneConfig = {
     maxSize: 1024 * 1024 * 4,
@@ -143,7 +143,7 @@ function Categories() {
       toast.success("Category created successfully");
       form.reset();
       setFile(null);
-    } catch (error) {
+    } catch () {
       toast.error("Something went wrong");
     }
   };
@@ -244,7 +244,7 @@ function Categories() {
                     <FormField
                       control={form.control}
                       name="file"
-                      render={({ field }) => (
+                      render={() => (
                         <FormItem>
                           <FormLabel>Image</FormLabel>
                           <FormControl>
@@ -437,7 +437,7 @@ function Categories() {
                               <FormField
                                 control={updateForm.control}
                                 name="file"
-                                render={({ field }) => (
+                                render={() => (
                                   <FormItem>
                                     <FormLabel>Image</FormLabel>
                                     <FormControl>
