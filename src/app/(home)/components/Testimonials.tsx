@@ -1,5 +1,3 @@
-import { TweetCard } from "./twittercard";
-
 export default function Testimonials() {
   return (
     <section
