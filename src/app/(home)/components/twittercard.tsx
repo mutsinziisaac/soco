@@ -1,4 +1,6 @@
 /* eslint-disable @next/next/no-img-element */
+
+/*
 import { Suspense } from "react";
 import {
   enrichTweet,
@@ -244,9 +246,11 @@ export const MagicTweet = ({
   );
 };
 
+
 /**
  * TweetCard (Server Side Only)
  */
+/*
  export default async function TweetCard({
    id,
    components,
@@ -283,3 +287,6 @@ export const MagicTweet = ({
     </Suspense>
   );
 };
+
+
+*/

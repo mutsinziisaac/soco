@@ -1,3 +1,5 @@
+{
+  /*
 import TweetCard from "./twittercard";
 
 const AsyncTweetCard = TweetCard as unknown as (
@@ -30,4 +32,6 @@ export default function Testimonials() {
       </div>
     </section>
   );
+}
+*/
 }
