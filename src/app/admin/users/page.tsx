@@ -87,7 +87,7 @@ const formSchema = z.object({
 
 function Users() {
   const dispatch = useAppDispatch();
-  const { users } = useAppSelector((state: any) => state.users);
+  const { users } = useAppSelector((state) => state.users);
   const [open, setOpen] = useState(false);
   const [updateId, setUpdateId] = useState<number | null>(null);
 
@@ -133,6 +133,7 @@ function Users() {
       setOpen(false);
     } catch (error) {
       toast.error("Something went wrong");
+      console.error(error);
     }
   };
 
@@ -146,6 +147,7 @@ function Users() {
       toast.success("User deleted successfully");
     } catch (error) {
       toast.error("Something went wrong");
+      console.error(error);
     }
   };
 
@@ -346,7 +348,7 @@ function Users() {
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {users?.users?.map((user: any) => (
+                  {users?.users?.map((user) => (
                     <TableRow key={user?.id}>
                       <TableCell className="hidden sm:table-cell">
                         <div

@@ -46,7 +46,7 @@ import { toast } from "sonner";
 
 function Products() {
   const dispatch = useAppDispatch();
-  const { products } = useAppSelector((state: any) => state.products);
+  const { products } = useAppSelector((state) => state.products);
 
   useEffect(() => {
     dispatch(getProducts());
@@ -58,6 +58,7 @@ function Products() {
       toast.success("Item deleted successfully");
     } catch (error) {
       toast.error("Something went wrong");
+      console.error(error);
     }
   };
 
@@ -119,7 +120,7 @@ function Products() {
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {products?.products?.map((product: any) => (
+                  {products?.products?.map((product) => (
                     <TableRow key={product?.id}>
                       <TableCell className="hidden sm:table-cell">
                         <Image

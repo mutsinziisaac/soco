@@ -112,7 +112,7 @@ function Categories() {
     },
   });
 
-  const [file, setFile] = useState<File | null>();
+  const [file, setFile] = useState<File | null>(null);
   const [updateId, setUpdateId] = useState<number | null>();
 
   useEffect(() => {
@@ -143,6 +143,7 @@ function Categories() {
       setFile(null);
     } catch (error) {
       toast.error("Something went wrong");
+      console.error(error);
     }
   };
 
@@ -167,6 +168,7 @@ function Categories() {
       setFile(null);
     } catch (error) {
       toast.error("Something went wrong");
+      console.error(error);
     }
   };
 
@@ -176,6 +178,7 @@ function Categories() {
       toast.success("Category deleted successfully");
     } catch (error) {
       toast.error("Something went wrong");
+      console.error(error);
     }
   };
 
@@ -314,7 +317,7 @@ function Categories() {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {categories?.categories?.map((category: any) => (
+              {categories?.categories?.map((category) => (
                 <TableRow key={category?.id}>
                   <TableCell className="hidden sm:table-cell">
                     <Image

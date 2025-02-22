@@ -3,7 +3,6 @@ import productsSlice from "./slices/productsSlice";
 import categoriesSlice from "./slices/categoriesSlice";
 import orderSlice from "./slices/orderSlice";
 import storefront from "./slices/storefront";
-import cartSlice from "./slices/cartSlice";
 import usersSlice from "./slices/usersSlice";
 import singleOrderSlice from "./slices/singleOrderSlice";
 import dashboardDataSlice from "./slices/dashboardSlice";
@@ -16,7 +15,6 @@ export const makeStore = () => {
       categories: categoriesSlice,
       orders: orderSlice,
       sfProducts: storefront,
-      cart: cartSlice,
       users: usersSlice,
       order: singleOrderSlice,
       dashboardData: dashboardDataSlice,

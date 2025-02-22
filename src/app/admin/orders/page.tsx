@@ -20,7 +20,7 @@ import {
 } from "@/components/ui/table";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { getOrders } from "@/lib/slices/orderSlice";
 import { useAppDispatch, useAppSelector } from "@/lib/hooks";
 
@@ -28,9 +28,7 @@ import { useRouter } from "next/navigation";
 
 function Orders() {
   const dispatch = useAppDispatch();
-  const { orders, loading, error } = useAppSelector(
-    (state: any) => state.orders,
-  );
+  const { orders } = useAppSelector((state) => state.orders);
   const router = useRouter();
 
   useEffect(() => {
@@ -50,14 +48,7 @@ function Orders() {
     }
   };
 
-  type OrderStatus =
-    | "Pending"
-    | "Confirmed"
-    | "Delivering"
-    | "Completed"
-    | "Cancelled";
-
-  function getBadge(status: OrderStatus) {
+  function getBadge(status: string) {
     switch (status) {
       case "Pending":
         return "bg-yellow-200 text-yellow-700";
@@ -105,7 +96,7 @@ function Orders() {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {orders?.orders?.map((order: any) => (
+              {orders?.orders?.map((order) => (
                 <TableRow
                   key={order?.id}
                   onClick={() => router.push(`/admin/orders/${order.id}`)}
@@ -127,8 +118,8 @@ function Orders() {
                   <TableCell>{order?.user?.tel}</TableCell>
                   <TableCell>{order?.shippingAddress?.fullAddress}</TableCell>
                   <TableCell className="flex -space-x-4">
-                    {order?.orderItems?.map((item, index) => (
-                      <div key={index}>
+                    {order?.orderItems?.map((item) => (
+                      <div key={item.id}>
                         <Avatar>
                           <AvatarImage src={item.product.images[0]} />
                           <AvatarFallback>CN</AvatarFallback>

@@ -111,6 +111,7 @@ export const FileUploader = forwardRef<
           // Optionally, you could blur or perform other actions here.
         }
       },
+      // eslint-disable-next-line react-hooks/exhaustive-deps
       [removeFile],
     );
 

@@ -62,7 +62,7 @@ export const createUser = createAsyncThunk(
 
 export const updateUser = createAsyncThunk(
   "users/updateUser",
-  async ({ userData, updateId }: { userData: Users; updateId: any }) => {
+  async ({ userData, updateId }: { userData: Users; updateId: number }) => {
     try {
       const response = await axios.put(
         `${baseUrl}/users/${updateId}`,

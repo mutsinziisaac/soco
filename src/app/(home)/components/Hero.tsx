@@ -23,23 +23,23 @@ export default function Hero() {
               <h1 className="text-base text-green-500 font-semibold tracking-wide uppercase">
                 Download Now
               </h1>
-              <div className="mt-5 sm:mt-8 sm:flex sm:justify-center items-center lg:justify-start">
-                <div className="rounded-md">
+              <div className="mt-5 flex  gap-12 items-center ">
+                <div>
                   <Link href="#download" className="w-full">
                     <Image
                       src="/apple.jpeg"
                       width={200}
-                      height={30}
+                      height={200}
                       alt="google play button"
                     />
                   </Link>
                 </div>
-                <div className="mt-3 sm:mt-0 sm:ml-3">
-                  <Link href="#download" className="w-full">
+                <div>
+                  <Link href="#download" className="w-full ">
                     <Image
                       src="/google.jpeg"
                       width={200}
-                      height={30}
+                      height={200}
                       alt="apple play button"
                     />
                   </Link>

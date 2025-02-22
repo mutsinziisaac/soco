@@ -25,7 +25,7 @@ import {
 import { toast } from "sonner";
 import { Input } from "@/components/ui/input";
 import { MultiSelect } from "@/components/ui/multi-select";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { getCategories } from "@/lib/slices/categoriesSlice";
 import { useAppDispatch, useAppSelector } from "@/lib/hooks";
 import { createProduct } from "@/lib/slices/productsSlice";
@@ -292,8 +292,10 @@ function CreatePage() {
                   <div className="grid grid-cols-3 gap-4 mt-4">
                     {images.map((image, index) => (
                       <div key={index} className="relative group">
-                        <img
+                        <Image
                           src={URL.createObjectURL(image)}
+                          width={100}
+                          height={100}
                           alt={`Selected image ${index + 1}`}
                           className="w-full h-40 object-cover rounded-md"
                         />

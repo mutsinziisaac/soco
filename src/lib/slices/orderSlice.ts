@@ -1,5 +1,6 @@
 import { createSlice, createAsyncThunk, createAction } from "@reduxjs/toolkit";
 import axios from "axios";
+import { Order, OrderItem } from "./singleOrderSlice";
 
 const baseUrl = process.env.NEXT_PUBLIC_BASE_API_URL;
 const token =
@@ -8,6 +9,17 @@ const token =
 interface Orders {
   id?: number;
   orderStatus: string;
+  user: {
+    name: string;
+    tel: string;
+    image: string;
+  };
+  shippingAddress: {
+    fullAddress: string;
+  };
+  totalAmount: number;
+  orderDate: Date;
+  orderItems: OrderItem[];
 }
 
 interface OrderState {
@@ -50,7 +62,7 @@ export const getOneOrder = createAsyncThunk(
 
 export const createOrder = createAsyncThunk(
   "orders/createOrder",
-  async (orderData: any) => {
+  async (orderData: Order) => {
     const response = await fetch(`${baseUrl}/orders`, {
       method: "POST",
       headers: {

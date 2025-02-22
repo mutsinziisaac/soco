@@ -160,7 +160,7 @@ const productsSlice = createSlice({
       .addCase(updateProduct.pending, (state) => {
         state.loading = true;
       })
-      .addCase(updateProduct.fulfilled, (state, action) => {
+      .addCase(updateProduct.fulfilled, (state) => {
         state.loading = false;
         state.error = "";
       })

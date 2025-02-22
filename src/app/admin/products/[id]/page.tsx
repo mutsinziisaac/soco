@@ -25,7 +25,7 @@ import {
 import { toast } from "sonner";
 import { Input } from "@/components/ui/input";
 import { MultiSelect } from "@/components/ui/multi-select";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { getCategories } from "@/lib/slices/categoriesSlice";
 import { useAppDispatch, useAppSelector } from "@/lib/hooks";
 import { getProduct, updateProduct } from "@/lib/slices/productsSlice";
@@ -155,6 +155,7 @@ function CreatePage({ params }: { params: { id: number } }) {
       });
       setSelectedUpdateImages(products?.images || []);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [loading, products, id]);
 
   return (

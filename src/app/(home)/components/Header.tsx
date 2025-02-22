@@ -16,7 +16,7 @@ export default function Header() {
                 height={100} // Default height (can be overridden by Tailwind classes)
               />
             </Link>
-            <div className="hidden ml-10 space-x-8">
+            <div className="hidden ml-10 space-x-8 lg:block">
               <Link
                 href="#features"
                 className="text-base font-medium text-gray-500 hover:text-gray-900"

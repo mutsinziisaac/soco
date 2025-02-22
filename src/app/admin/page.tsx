@@ -17,7 +17,6 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import {
-  ChartConfig,
   ChartContainer,
   ChartTooltip,
   ChartTooltipContent,
@@ -27,14 +26,7 @@ import { getDashboardData } from "@/lib/slices/dashboardSlice";
 import { NumberTicker } from "@/components/magicui/number-ticker";
 import { getChartData } from "@/lib/slices/chartSlice";
 import { getOrders } from "@/lib/slices/orderSlice";
-import {
-  TableHeader,
-  TableRow,
-  TableHead,
-  TableBody,
-  TableCell,
-  Table,
-} from "@/components/ui/table";
+import { TableRow, TableBody, TableCell, Table } from "@/components/ui/table";
 import { useRouter } from "next/navigation";
 import { Badge } from "@/components/ui/badge";
 
@@ -52,15 +44,11 @@ export default function Home() {
     (state) => state.dashboardData,
   );
 
-  const { chartData, loading: chartLoading } = useAppSelector(
-    (state) => state?.chartData,
-  );
+  const { chartData } = useAppSelector((state) => state?.chartData);
 
-  const {
-    orders,
-    loading: ordersLoading,
-    error,
-  } = useAppSelector((state: any) => state.orders);
+  const { orders, loading: ordersLoading } = useAppSelector(
+    (state) => state.orders,
+  );
 
   useEffect(() => {
     dispatch(getDashboardData());
@@ -68,9 +56,7 @@ export default function Home() {
     dispatch(getOrders());
   }, [dispatch]);
 
-  type ProfileColor = "red" | "blue" | "green" | "yellow" | "purple" | "pink";
-
-  function profileColor(color: ProfileColor) {
+  function profileColor(color: string) {
     switch (color) {
       case "red":
         return "bg-red-500";
@@ -89,14 +75,7 @@ export default function Home() {
     }
   }
 
-  type OrderStatus =
-    | "Pending"
-    | "Confirmed"
-    | "Delivering"
-    | "Completed"
-    | "Cancelled";
-
-  function getBadge(status: OrderStatus) {
+  function getBadge(status: string) {
     switch (status) {
       case "Pending":
         return "bg-yellow-200 text-yellow-700";
@@ -284,7 +263,7 @@ export default function Home() {
             ) : (
               <Table>
                 <TableBody>
-                  {orders?.orders?.map((order: any) => (
+                  {orders?.orders?.map((order) => (
                     <TableRow
                       key={order?.id}
                       onClick={() => router.push(`/admin/orders/${order.id}`)}

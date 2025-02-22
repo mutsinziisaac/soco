@@ -25,13 +25,18 @@ export interface ShippingAddress {
 export interface User {
   name: string;
   tel: string;
+  image: string;
 }
 
 export interface OrderItem {
+  id: number;
   product: Product;
+  quantity: number;
+  price: number;
 }
 
 export interface Product {
+  name: string;
   images: string[];
 }
 
@@ -129,7 +134,7 @@ export const singleOrderSlice = createSlice({
       .addCase(deleteOrder.pending, (state) => {
         state.loading = true;
       })
-      .addCase(deleteOrder.fulfilled, (state, action) => {
+      .addCase(deleteOrder.fulfilled, (state) => {
         state.loading = false;
         state.order = {};
       })

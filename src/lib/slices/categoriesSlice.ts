@@ -8,6 +8,10 @@ type Categories = {
   id?: number;
   name: string;
   description: string;
+  image: string;
+  _count: {
+    products: number;
+  };
 };
 
 interface CategoriesState {
@@ -56,14 +60,15 @@ export const createCategory = createAsyncThunk(
       });
       return response.data;
     } catch (error) {
-      throw new Error("an erroe occured creating category", error);
+      throw new Error("an erroe occured creating category");
+      console.log(error);
     }
   },
 );
 
 export const updateCategory = createAsyncThunk(
   "categories/updateCategory",
-  async ({ formData, updateId }: { formData: FormData; updateId: any }) => {
+  async ({ formData, updateId }: { formData: FormData; updateId: number }) => {
     try {
       const response = await axios.put(
         `${baseUrl}/categories/${updateId}`,

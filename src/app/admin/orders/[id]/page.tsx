@@ -1,9 +1,8 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { format } from "date-fns";
 import { motion } from "framer-motion";
 import {
   AlertDialog,
@@ -43,14 +42,7 @@ import {
 import { useAppDispatch, useAppSelector } from "@/lib/hooks";
 import moment from "moment";
 
-type OrderStatus =
-  | "Pending"
-  | "Confirmed"
-  | "Delivering"
-  | "Completed"
-  | "Cancelled";
-
-function getBadge(status: OrderStatus) {
+function getBadge(status: string) {
   switch (status) {
     case "Pending":
       return "bg-yellow-200 text-yellow-700";
@@ -75,7 +67,7 @@ export default function OrderDetails({ params }: { params: { id: number } }) {
     dispatch(getOneOrder(id));
   }, [dispatch, id]);
 
-  const { loading, order } = useAppSelector((state) => state.order);
+  const { order } = useAppSelector((state) => state.order);
 
   const router = useRouter();
 
@@ -87,6 +79,7 @@ export default function OrderDetails({ params }: { params: { id: number } }) {
       toast.success("Order status changed");
     } catch (error) {
       toast.error("Something went wrong");
+      console.error(error);
     }
   };
 
@@ -97,10 +90,11 @@ export default function OrderDetails({ params }: { params: { id: number } }) {
       router.push("/admin/orders");
     } catch (error) {
       toast.error("Something went wrong");
+      console.error(error);
     }
   };
 
-  const timeAgo = (timestamp: Date) => {
+  const timeAgo = (timestamp: string) => {
     const date = moment(timestamp);
     const now = moment();
 
@@ -194,7 +188,7 @@ export default function OrderDetails({ params }: { params: { id: number } }) {
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {order?.orderItems?.map((item, index) => (
+                  {order?.orderItems?.map((item) => (
                     <TableRow key={item?.id}>
                       <TableCell>
                         <div className="w-12 h-12 relative">
