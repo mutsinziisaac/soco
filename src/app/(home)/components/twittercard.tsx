@@ -247,29 +247,35 @@ export const MagicTweet = ({
 /**
  * TweetCard (Server Side Only)
  */
-export const TweetCard = async ({
-  id,
-  components,
-  fallback = <TweetSkeleton />,
-  onError,
-  ...props
-}: TweetProps & {
-  className?: string;
-}) => {
-  const tweet = id
-    ? await getTweet(id).catch((err) => {
-        if (onError) {
-          onError(err);
-        } else {
-          console.error(err);
-        }
-      })
-    : undefined;
+ export default async function TweetCard({
+   id,
+   components,
+   fallback = <TweetSkeleton />,
+   onError,
+   ...props
+ }: TweetProps & { className?: string }): Promise<JSX.Element> {
+   const tweet = id
+     ? await getTweet(id).catch((err) => {
+         if (onError) {
+           onError(err);
+         } else {
+           console.error(err);
+         }
+       })
+     : undefined;
 
-  if (!tweet) {
-    const NotFound = components?.TweetNotFound || TweetNotFound;
-    return <NotFound {...props} />;
-  }
+   if (!tweet) {
+     const NotFound = components?.TweetNotFound || TweetNotFound;
+     return <NotFound {...props} />;
+   }
+
+   return (
+     <Suspense fallback={fallback}>
+       <MagicTweet tweet={tweet} {...props} />
+     </Suspense>
+   );
+ }
+
 
   return (
     <Suspense fallback={fallback}>
