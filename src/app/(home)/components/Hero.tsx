@@ -27,7 +27,7 @@ export default function Hero() {
                 <div>
                   <Link href="#download" className="w-full">
                     <Image
-                      src="/apple.jpeg"
+                      src="/apple.svg"
                       width={200}
                       height={200}
                       alt="google play button"
@@ -37,7 +37,7 @@ export default function Hero() {
                 <div>
                   <Link href="#download" className="w-full ">
                     <Image
-                      src="/google.jpeg"
+                      src="/google.svg"
                       width={200}
                       height={200}
                       alt="apple play button"
