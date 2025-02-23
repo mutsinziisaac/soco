@@ -23,14 +23,14 @@ export default function Hero() {
               <h1 className="text-base text-green-500 font-semibold tracking-wide uppercase">
                 Download Now
               </h1>
-              <div className="mt-5 flex  gap-12 items-center ">
+              <div className="flex  gap-10 items-center ">
                 <div>
                   <Link href="#download" className="w-full">
                     <Image
                       src="/apple.svg"
                       width={200}
                       height={200}
-                      alt="google play button"
+                      alt="app store button"
                     />
                   </Link>
                 </div>
@@ -40,7 +40,7 @@ export default function Hero() {
                       src="/google.svg"
                       width={200}
                       height={200}
-                      alt="apple play button"
+                      alt="google play button"
                     />
                   </Link>
                 </div>
