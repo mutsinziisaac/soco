@@ -42,7 +42,7 @@ import {
 import { useAppDispatch, useAppSelector } from "@/lib/hooks";
 import moment from "moment";
 
-function getBadge(status: string) {
+function getBadge(status: string | undefined) {
   switch (status) {
     case "Pending":
       return "bg-yellow-200 text-yellow-700";
@@ -117,7 +117,11 @@ export default function OrderDetails({ params }: { params: { id: number } }) {
         <Card className="w-full max-w-5xl mx-auto overflow-hidden shadow-lg">
           <div className="bg-gradient-to-r from-orange-500 to-green-500 p-6 text-white">
             <h1 className="text-3xl font-bold">Order #{order?.id}</h1>
-            <p className="text-lg mt-2">{timeAgo(order?.orderDate)}</p>
+            <p className="text-lg mt-2">
+              {order?.orderDate
+                ? timeAgo(order.orderDate)
+                : "No date available"}
+            </p>
           </div>
           <CardContent className="p-6">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">

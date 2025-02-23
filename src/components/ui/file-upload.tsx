@@ -84,9 +84,6 @@ export const FileUploader = forwardRef<
       maxSize,
       multiple: false,
       ...dropzoneOptions,
-      // Override these if provided externally:
-      maxFiles: 1,
-      multiple: false,
     };
 
     const removeFile = useCallback(() => {

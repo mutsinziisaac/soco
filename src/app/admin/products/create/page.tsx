@@ -232,6 +232,11 @@ function CreatePage() {
                           options={
                             Array.isArray(categories.categories)
                               ? categories.categories
+                                  .filter((cat) => cat.id !== undefined)
+                                  .map((cat) => ({
+                                    id: cat.id as number,
+                                    name: cat.name,
+                                  }))
                               : []
                           }
                           onValueChange={field.onChange}

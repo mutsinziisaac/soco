@@ -21,10 +21,7 @@ import {
   CommandSeparator,
 } from "@/components/ui/command";
 
-/**
- * Variants for the multi-select component to handle different styles.
- * Uses class-variance-authority (cva) to define different styles based on "variant" prop.
- */
+// Define the multi-select variants.
 const multiSelectVariants = cva(
   "m-1 transition ease-in-out delay-150 hover:-translate-y-1 hover:scale-110 duration-300",
   {
@@ -45,67 +42,50 @@ const multiSelectVariants = cva(
   },
 );
 
-/**
- * Props for MultiSelect component
- */
+// Use a dedicated type for options with numeric IDs.
+interface Option {
+  name: string;
+  id: number;
+}
+
+// Extend ButtonHTMLAttributes but omit the defaultValue prop so we can use our own type.
 interface MultiSelectProps
-  extends React.ButtonHTMLAttributes<HTMLButtonElement>,
+  extends Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, "defaultValue">,
     VariantProps<typeof multiSelectVariants> {
   /**
-   * An array of option objects to be displayed in the multi-select component.
-   * Each option object has a label, value, and an optional icon.
+   * Array of options to display.
    */
-  options: {
-    /** The text to display for the option. */
-    name: string;
-    /** The unique value associated with the option. */
-    id: string;
-    /** Optional icon component to display alongside the option. */
-  }[];
-
+  options: Option[];
   /**
-   * Callback function triggered when the selected values change.
-   * Receives an array of the new selected values.
+   * Callback when selected values change.
    */
-  onValueChange: (id: number) => void;
-
-  /** The default selected values when the component mounts. */
+  onValueChange: (ids: number[]) => void;
+  /**
+   * Default selected values.
+   */
   defaultValue?: number[];
-
   /**
-   * Placeholder text to be displayed when no values are selected.
-   * Optional, defaults to "Select options".
+   * Placeholder when no value is selected.
    */
   placeholder?: string;
-
   /**
-   * Animation duration in seconds for the visual effects (e.g., bouncing badges).
-   * Optional, defaults to 0 (no animation).
+   * Animation duration in seconds.
    */
   animation?: number;
-
   /**
-   * Maximum number of items to display. Extra selected items will be summarized.
-   * Optional, defaults to 3.
+   * Maximum number of items to display.
    */
   maxCount?: number;
-
   /**
-   * The modality of the popover. When set to true, interaction with outside elements
-   * will be disabled and only popover content will be visible to screen readers.
-   * Optional, defaults to false.
+   * Modal popover flag.
    */
   modalPopover?: boolean;
-
   /**
-   * If true, renders the multi-select component as a child of another component.
-   * Optional, defaults to false.
+   * Render as a child.
    */
   asChild?: boolean;
-
   /**
-   * Additional class names to apply custom styles to the multi-select component.
-   * Optional, can be used to add custom styles.
+   * Additional class names.
    */
   className?: string;
 }
@@ -129,7 +109,9 @@ export const MultiSelect = React.forwardRef<
     },
     ref,
   ) => {
-    const [selectedValues, setSelectedValues] = React.useState(defaultValue);
+    // The selectedValues state is now strictly a number[].
+    const [selectedValues, setSelectedValues] =
+      React.useState<number[]>(defaultValue);
     const [isPopoverOpen, setIsPopoverOpen] = React.useState(false);
     const [isAnimating] = React.useState(false);
 
@@ -146,10 +128,11 @@ export const MultiSelect = React.forwardRef<
       }
     };
 
-    const toggleOption = (option: string) => {
-      const newSelectedValues = selectedValues.includes(option)
-        ? selectedValues.filter((id) => id !== option)
-        : [...selectedValues, option];
+    // Change toggleOption to work with number IDs.
+    const toggleOption = (optionId: number) => {
+      const newSelectedValues = selectedValues.includes(optionId)
+        ? selectedValues.filter((id) => id !== optionId)
+        : [...selectedValues, optionId];
       setSelectedValues(newSelectedValues);
       onValueChange(newSelectedValues);
     };
@@ -286,7 +269,6 @@ export const MultiSelect = React.forwardRef<
                       >
                         <CheckIcon className="h-4 w-4" />
                       </div>
-
                       <span>{option.name}</span>
                     </CommandItem>
                   );

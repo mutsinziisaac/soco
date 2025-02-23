@@ -141,9 +141,8 @@ function Categories() {
       toast.success("Category created successfully");
       form.reset();
       setFile(null);
-    } catch (error) {
+    } catch {
       toast.error("Something went wrong");
-      console.error(error);
     }
   };
 
@@ -167,9 +166,8 @@ function Categories() {
         });
         setUpdateId(null);
         setFile(null);
-      } catch (error) {
+      } catch {
         toast.error("Something went wrong");
-        console.error(error);
       }
     }
   };
@@ -178,9 +176,8 @@ function Categories() {
     try {
       await dispatch(deleteCategory(id)).unwrap();
       toast.success("Category deleted successfully");
-    } catch (error) {
+    } catch {
       toast.error("Something went wrong");
-      console.error(error);
     }
   };
 

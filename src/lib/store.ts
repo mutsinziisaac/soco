@@ -7,6 +7,7 @@ import usersSlice from "./slices/usersSlice";
 import singleOrderSlice from "./slices/singleOrderSlice";
 import dashboardDataSlice from "./slices/dashboardSlice";
 import chartDataSlice from "./slices/chartSlice";
+import productSlice from "./slices/productSlice";
 
 export const makeStore = () => {
   return configureStore({
@@ -19,6 +20,7 @@ export const makeStore = () => {
       order: singleOrderSlice,
       dashboardData: dashboardDataSlice,
       chartData: chartDataSlice,
+      product: productSlice,
     },
   });
 };

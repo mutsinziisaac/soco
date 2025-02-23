@@ -12,6 +12,18 @@ type Users = {
   email: string;
   role: string;
   image: string;
+  _count: {
+    orders: number;
+  };
+};
+
+type CreateUser = {
+  id?: number;
+  name: string;
+  tel: string;
+  password: string;
+  email: string;
+  role: string;
 };
 
 interface UsersState {
@@ -47,7 +59,7 @@ export const getUsers = createAsyncThunk("users/getUsers", async () => {
 
 export const createUser = createAsyncThunk(
   "users/createUsers",
-  async (userData: Users) => {
+  async (userData: CreateUser) => {
     try {
       const response = await axios.post(`${baseUrl}/users`, userData, {
         headers: {
@@ -56,14 +68,20 @@ export const createUser = createAsyncThunk(
       });
       return response.data;
     } catch (error) {
-      throw new Error("an erroe occured creating user", error);
+      throw new Error("an erroe occured creating user", { cause: error });
     }
   },
 );
 
 export const updateUser = createAsyncThunk(
   "users/updateUser",
-  async ({ userData, updateId }: { userData: Users; updateId: number }) => {
+  async ({
+    userData,
+    updateId,
+  }: {
+    userData: CreateUser;
+    updateId: number;
+  }) => {
     try {
       const response = await axios.put(
         `${baseUrl}/users/${updateId}`,
@@ -76,7 +94,7 @@ export const updateUser = createAsyncThunk(
       );
       return response.data;
     } catch (error) {
-      throw new Error("an erroe occured updating user", error);
+      throw new Error("an erroe occured updating user", { cause: error });
     }
   },
 );
@@ -92,7 +110,7 @@ export const deleteUser = createAsyncThunk(
       });
       return response.data;
     } catch (error) {
-      throw new Error("error occured deleting user", error);
+      throw new Error("error occured deleting user", { cause: error });
     }
   },
 );

@@ -82,7 +82,7 @@ export const updateCategory = createAsyncThunk(
       );
       return response.data;
     } catch (error) {
-      throw new Error("an erroe occured updating category", error);
+      throw new Error("an erroe occured updating category", { cause: error });
     }
   },
 );
@@ -98,7 +98,7 @@ export const deleteCategory = createAsyncThunk(
       });
       return response.data;
     } catch (error) {
-      throw new Error("error occured deleting category", error);
+      throw new Error("error occured deleting category", { cause: error });
     }
   },
 );

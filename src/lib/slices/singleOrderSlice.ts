@@ -41,7 +41,7 @@ export interface Product {
 }
 
 interface OrderState {
-  order: Order;
+  order: Partial<Order>;
   loading: boolean;
   error: string;
 }
@@ -57,7 +57,7 @@ export const getOneOrder = createAsyncThunk(
       });
       return response.data;
     } catch (error) {
-      throw new Error(`An error fetching orders: ${error.message}`);
+      throw new Error(`An error fetching orders`, { cause: error });
     }
   },
 );
@@ -78,7 +78,7 @@ export const changeOrderStatus = createAsyncThunk(
       );
       return response.data;
     } catch (error) {
-      throw new Error("error changing status", error);
+      throw new Error("error changing status", { cause: error });
     }
   },
 );
@@ -94,7 +94,7 @@ export const deleteOrder = createAsyncThunk(
       });
       return response.data;
     } catch (error) {
-      throw new Error("error occured deleting category", error);
+      throw new Error("error occured deleting category", { cause: error });
     }
   },
 );

@@ -27,7 +27,8 @@ import { Input } from "@/components/ui/input";
 import { MultiSelect } from "@/components/ui/multi-select";
 import { getCategories } from "@/lib/slices/categoriesSlice";
 import { useAppDispatch, useAppSelector } from "@/lib/hooks";
-import { getProduct, updateProduct } from "@/lib/slices/productsSlice";
+import { updateProduct } from "@/lib/slices/productsSlice";
+import { getProduct } from "@/lib/slices/productSlice";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 
@@ -140,7 +141,7 @@ function CreatePage({ params }: { params: { id: number } }) {
   };
 
   const { categories } = useAppSelector((state) => state.categories);
-  const { loading, products } = useAppSelector((state) => state.products);
+  const { loading, product } = useAppSelector((state) => state.product);
 
   useEffect(() => {
     dispatch(getCategories());
@@ -148,20 +149,21 @@ function CreatePage({ params }: { params: { id: number } }) {
   }, [dispatch, id]);
 
   useEffect(() => {
-    if (!loading && products && products?.categories) {
+    if (!loading && product) {
       form.reset({
-        name: products?.name || "",
-        price: products?.price || 0,
-        description: products?.description || "",
-        categories: products?.categories?.map((category) => category.id) || [],
-        discount: products?.discount || 0,
-        uom: products?.uom || "",
-        images: products?.images || [],
+        name: product?.name || "",
+        price: product?.price || 0,
+        description: product?.description || "",
+        categories: product?.categories?.map((category) => category.id) || [],
+        discount: product?.discount || 0,
+        uom: product?.uom || "",
+        images: product?.images || [],
       });
-      setSelectedUpdateImages(products?.images || []);
+      setSelectedUpdateImages(product?.images || []);
     }
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [loading, products, id]);
+  }, [loading, id]);
 
   return (
     <>
@@ -256,6 +258,11 @@ function CreatePage({ params }: { params: { id: number } }) {
                           options={
                             Array.isArray(categories.categories)
                               ? categories.categories
+                                  .filter((cat) => cat.id !== undefined)
+                                  .map((cat) => ({
+                                    id: cat.id as number,
+                                    name: cat.name,
+                                  }))
                               : []
                           }
                           onValueChange={field.onChange}

@@ -40,7 +40,7 @@ export const getDashboardData = createAsyncThunk(
       });
       return response.data;
     } catch (error) {
-      throw new Error("an error occured", error);
+      throw new Error("an error occured", { cause: error });
     }
   },
 );

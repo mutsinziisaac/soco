@@ -40,7 +40,7 @@ export const getOrders = createAsyncThunk("orders/getOrders", async () => {
     });
     return response.data;
   } catch (error) {
-    throw new Error(`An error fetching orders: ${error.message}`);
+    throw new Error(`An error fetching orders`, { cause: error });
   }
 });
 
@@ -55,7 +55,7 @@ export const getOneOrder = createAsyncThunk(
       });
       return response.data;
     } catch (error) {
-      throw new Error(`An error fetching orders: ${error.message}`);
+      throw new Error(`An error fetching orders`, { cause: error });
     }
   },
 );

@@ -83,6 +83,7 @@ const formSchema = z.object({
     .string()
     .min(6, { message: "password must be atleast 6 characters" }),
   role: z.string(),
+  image: z.string(),
 });
 
 function Users() {
@@ -392,7 +393,11 @@ function Users() {
                                     user?.password,
                                   );
                                   setOpen(true);
-                                  setUpdateId(user?.id);
+                                  if (user?.id != undefined) {
+                                    setUpdateId(user?.id);
+                                  } else {
+                                    toast.error("no user ID found");
+                                  }
                                 }}
                               >
                                 Edit
@@ -419,7 +424,11 @@ function Users() {
                               <AlertDialogAction
                                 className="bg-red-600 hover:bg-red-500"
                                 onClick={() => {
-                                  handleDeleteUser(user?.id);
+                                  if (user?.id != undefined) {
+                                    handleDeleteUser(user?.id);
+                                  } else {
+                                    toast.error("no user ID found");
+                                  }
                                 }}
                               >
                                 Continue

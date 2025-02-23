@@ -14,10 +14,14 @@ type Product = {
   name: string;
   description: string;
   price: number;
-  images: File[];
+  images: string[];
   categories?: Category[]; // Add categories if needed
   discount?: number;
   uom?: string;
+  status: string;
+  _count: {
+    orderItems: number;
+  };
 };
 
 interface ProductsState {
@@ -54,22 +58,6 @@ export const getProducts = createAsyncThunk(
   },
 );
 
-export const getProduct = createAsyncThunk(
-  "products/getProduct",
-  async (id: number) => {
-    try {
-      const response = await axios.get(`${baseUrl}/products/${id}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      return response.data;
-    } catch (error) {
-      console.error("Error fetching product:", error);
-    }
-  },
-);
-
 export const createProduct = createAsyncThunk(
   "products/createProduct",
   async (formData: FormData) => {
@@ -82,7 +70,9 @@ export const createProduct = createAsyncThunk(
       });
       return response.data;
     } catch (error) {
-      throw new Error("error occured when creating a product", error);
+      throw new Error("error occured when creating a product", {
+        cause: error,
+      });
     }
   },
 );
@@ -99,7 +89,9 @@ export const updateProduct = createAsyncThunk(
       });
       return response.data;
     } catch (error) {
-      throw new Error("error occured when updating a product", error);
+      throw new Error("error occured when updating a product", {
+        cause: error,
+      });
     }
   },
 );
@@ -115,7 +107,7 @@ export const deleteProduct = createAsyncThunk(
       });
       return response.data;
     } catch (error) {
-      throw new Error("an error occured while deletind", error);
+      throw new Error("an error occured while deletind", { cause: error });
     }
   },
 );
@@ -136,19 +128,6 @@ const productsSlice = createSlice({
         state.error = "";
       })
       .addCase(getProducts.rejected, (state) => {
-        state.loading = false;
-        state.error = "Something went wrong";
-      })
-
-      .addCase(getProduct.pending, (state) => {
-        state.loading = true;
-      })
-      .addCase(getProduct.fulfilled, (state, action) => {
-        state.products = action.payload;
-        state.loading = false;
-        state.error = "";
-      })
-      .addCase(getProduct.rejected, (state) => {
         state.loading = false;
         state.error = "Something went wrong";
       })
