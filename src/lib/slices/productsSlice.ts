@@ -4,12 +4,20 @@ const token =
   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEwLCJ1c2VybmFtZSI6ImR1ZHVkYWRvcGUiLCJyb2xlIjoiYWRtaW4iLCJpYXQiOjE3Mzg2Njg5MzAsImV4cCI6MTczODY3MjUzMH0.XVvTQc08AoAOHmpo8DFmG0XU96aCLFLb_WySBLRRNeA";
 const baseUrl = process.env.NEXT_PUBLIC_BASE_API_URL;
 
+type Category = {
+  id: number;
+  name: string;
+};
+
 type Product = {
   id: number;
   name: string;
   description: string;
   price: number;
   images: File[];
+  categories?: Category[]; // Add categories if needed
+  discount?: number;
+  uom?: string;
 };
 
 interface ProductsState {

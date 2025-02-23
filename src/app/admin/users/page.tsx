@@ -151,9 +151,7 @@ function Users() {
     }
   };
 
-  type ProfileColor = "red" | "blue" | "green" | "yellow" | "purple" | "pink";
-
-  function profileColor(color: ProfileColor) {
+  function profileColor(color: string) {
     switch (color) {
       case "red":
         return "bg-red-500";

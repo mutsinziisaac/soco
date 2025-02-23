@@ -25,7 +25,6 @@ import {
 import { toast } from "sonner";
 import { Input } from "@/components/ui/input";
 import { MultiSelect } from "@/components/ui/multi-select";
-import { useSelector } from "react-redux";
 import { getCategories } from "@/lib/slices/categoriesSlice";
 import { useAppDispatch, useAppSelector } from "@/lib/hooks";
 import { createProduct } from "@/lib/slices/productsSlice";
@@ -93,8 +92,13 @@ function CreatePage() {
     formData.append("price", data.price.toString());
     formData.append("description", data.description);
     formData.append("categories", JSON.stringify(data.categories));
-    formData.append("discount", data.discount);
-    formData.append("uom", data.uom);
+    if (data.discount !== undefined) {
+      formData.append("discount", data.discount.toString());
+    }
+
+    if (data.uom !== undefined) {
+      formData.append("uom", data.uom.toString());
+    }
 
     images.forEach((image: File) => {
       formData.append("files", image);
@@ -128,7 +132,7 @@ function CreatePage() {
     fileInputRef.current?.click();
   };
 
-  const { categories = [] } = useSelector((state) => state.categories || {});
+  const { categories } = useAppSelector((state) => state.categories);
   const { loading } = useAppSelector((state) => state.products);
 
   useEffect(() => {

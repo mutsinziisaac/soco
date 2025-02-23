@@ -11,6 +11,7 @@ type Users = {
   password: string;
   email: string;
   role: string;
+  image: string;
 };
 
 interface UsersState {

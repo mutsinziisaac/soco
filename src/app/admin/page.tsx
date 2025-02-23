@@ -209,6 +209,7 @@ export default function Home() {
                   right: 12,
                 }}
               >
+                x
                 <CartesianGrid vertical={false} />
                 <XAxis
                   dataKey="date"

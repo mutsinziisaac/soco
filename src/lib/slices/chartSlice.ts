@@ -11,7 +11,7 @@ export interface ChartData {
 }
 
 interface ChartDataState {
-  chartData: ChartData;
+  chartData: ChartData[];
   loading: boolean;
   error: string;
 }
@@ -35,7 +35,7 @@ export const getChartData = createAsyncThunk(
 export const chartDataSlice = createSlice({
   name: "chartData",
   initialState: {
-    chartData: {},
+    chartData: [],
     loading: false,
     error: "",
   } as ChartDataState,

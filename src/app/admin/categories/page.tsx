@@ -113,7 +113,7 @@ function Categories() {
   });
 
   const [file, setFile] = useState<File | null>(null);
-  const [updateId, setUpdateId] = useState<number | null>();
+  const [updateId, setUpdateId] = useState<number | null>(null);
 
   useEffect(() => {
     dispatch(getCategories());
@@ -157,18 +157,20 @@ function Categories() {
       console.error("No file selected");
     }
 
-    try {
-      await dispatch(updateCategory({ formData, updateId })).unwrap();
-      toast.success("Category Updated successfully");
-      updateForm.reset({
-        name: "",
-        description: "",
-      });
-      setUpdateId(null);
-      setFile(null);
-    } catch (error) {
-      toast.error("Something went wrong");
-      console.error(error);
+    if (updateId !== null) {
+      try {
+        await dispatch(updateCategory({ formData, updateId })).unwrap();
+        toast.success("Category Updated successfully");
+        updateForm.reset({
+          name: "",
+          description: "",
+        });
+        setUpdateId(null);
+        setFile(null);
+      } catch (error) {
+        toast.error("Something went wrong");
+        console.error(error);
+      }
     }
   };
 
@@ -352,7 +354,7 @@ function Categories() {
                             <DialogTrigger asChild>
                               <DropdownMenuItem
                                 onClick={() => {
-                                  setUpdateId(category?.id);
+                                  setUpdateId(category?.id ?? null);
                                   setUpdateData(
                                     category?.name,
                                     category?.description,
@@ -383,7 +385,11 @@ function Categories() {
                             <AlertDialogAction
                               className="bg-red-600 hover:bg-red-500"
                               onClick={() => {
-                                handleDeleteCategory(category?.id);
+                                if (category?.id !== undefined) {
+                                  handleDeleteCategory(category.id);
+                                } else {
+                                  toast.error("Category id is missing.");
+                                }
                               }}
                             >
                               Continue
