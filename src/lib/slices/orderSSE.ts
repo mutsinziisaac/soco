@@ -1,8 +1,9 @@
 // ordersSSE.js
 import { orderReceived } from "./orderSlice";
 const baseUrl = process.env.NEXT_PUBLIC_BASE_API_URL;
+import { Dispatch } from "redux";
 
-export const startOrderSSE = () => (dispatch) => {
+export const startOrderSSE = () => (dispatch: Dispatch) => {
   // Replace with your SSE endpoint
   const eventSource = new EventSource(`${baseUrl}/orders/sse`);
 

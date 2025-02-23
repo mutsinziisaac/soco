@@ -2,11 +2,11 @@
 "use client";
 
 import { useEffect } from "react";
-import { useDispatch } from "react-redux";
 import { startOrderSSE } from "@/lib/slices/orderSSE"; // adjust path as needed
+import { useAppDispatch } from "@/lib/hooks";
 
 const SSEProvider = () => {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
     // Start the SSE subscription.
