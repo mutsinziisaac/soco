@@ -33,6 +33,10 @@ export default function RootLayout({
   return (
     <html lang="en">
       <Head>
+        <meta
+          name="google-site-verification"
+          content="JAmjU3NwzyBwdKmUJEEygcVOirSxSvkDXRfUF3jQZ_A"
+        />
         <meta name="apple-mobile-web-app-title" content="soco" />
       </Head>
       <body
