@@ -1,0 +1,17 @@
+# Allow search engines to crawl only the home page
+User-agent: *
+Allow: /
+
+# Disallow crawling of all other pages
+Disallow: /admin
+Disallow: /admin/*
+Disallow: /login
+Disallow: /_not-found
+Disallow: /apple-icon.png
+Disallow: /icon.png
+Disallow: /icon.svg
+Disallow: /manifest.json
+
+
+# Sitemap location
+Sitemap: https://soco-amber.vercel.app/sitemap.xml

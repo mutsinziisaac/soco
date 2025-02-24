@@ -10,8 +10,9 @@ export default function DownloadCTA() {
           <span className="block">Download our app today!</span>
         </h2>
         <p className="mt-4 text-lg leading-6 text-green-100">
-          Get started with Soco and experience the convenience of grocery
-          shopping from your phone. Available for both iOS and Android devices.
+          Get started with Soco and experience the convenience of fresh grocery
+          shopping in uganda from your phone. Available for both iOS and Android
+          devices.
         </p>
         <div className="mt-8 flex justify-center">
           <div className="inline-flex rounded-md shadow">
