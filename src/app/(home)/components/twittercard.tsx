@@ -1,6 +1,4 @@
 /* eslint-disable @next/next/no-img-element */
-
-/*
 import { Suspense } from "react";
 import {
   enrichTweet,
@@ -179,47 +177,54 @@ export const TweetBody = ({ tweet }: { tweet: EnrichedTweet }) => (
   </div>
 );
 
-export const TweetMedia = ({ tweet }: { tweet: EnrichedTweet }) => (
-  <div className="flex flex-1 items-center justify-center">
-    {tweet.video && (
-      <video
-        poster={tweet.video.poster}
-        autoPlay
-        loop
-        muted
-        playsInline
-        className="rounded-xl border shadow-sm"
-      >
-        <source src={tweet.video.variants[0].src} type="video/mp4" />
-        Your browser does not support the video tag.
-      </video>
-    )}
-    {tweet.photos && (
-      <div className="relative flex transform-gpu snap-x snap-mandatory gap-4 overflow-x-auto">
-        <div className="shrink-0 snap-center sm:w-2" />
-        {tweet.photos.map((photo) => (
-          <img
-            key={photo.url}
-            src={photo.url}
-            title={"Photo by " + tweet.user.name}
-            alt={tweet.text}
-            className="h-64 w-5/6 shrink-0 snap-center snap-always rounded-xl border object-cover shadow-sm"
-          />
-        ))}
-        <div className="shrink-0 snap-center sm:w-2" />
-      </div>
-    )}
-    {!tweet.video &&
-      !tweet.photos &&
-      tweet?.card?.binding_values?.thumbnail_image_large?.image_value.url && (
-        <img
-          src={tweet.card.binding_values.thumbnail_image_large.image_value.url}
-          className="h-64 rounded-xl border object-cover shadow-sm"
-          alt={tweet.text}
-        />
+export const TweetMedia = ({ tweet }: { tweet: EnrichedTweet }) => {
+  if (!tweet.video && !tweet.photos) return null;
+  return (
+    <div className="flex flex-1 items-center justify-center">
+      {tweet.video && (
+        <video
+          poster={tweet.video.poster}
+          autoPlay
+          loop
+          muted
+          playsInline
+          className="rounded-xl border shadow-sm"
+        >
+          <source src={tweet.video.variants[0].src} type="video/mp4" />
+          Your browser does not support the video tag.
+        </video>
       )}
-  </div>
-);
+      {tweet.photos && (
+        <div className="relative flex transform-gpu snap-x snap-mandatory gap-4 overflow-x-auto">
+          <div className="shrink-0 snap-center sm:w-2" />
+          {tweet.photos.map((photo) => (
+            <img
+              key={photo.url}
+              src={photo.url}
+              title={"Photo by " + tweet.user.name}
+              alt={tweet.text}
+              className="h-64 w-5/6 shrink-0 snap-center snap-always rounded-xl border object-cover shadow-sm"
+            />
+          ))}
+          <div className="shrink-0 snap-center sm:w-2" />
+        </div>
+      )}
+      {!tweet.video &&
+        !tweet.photos &&
+        // @ts-expect-error - The `card` property is not properly typed
+        tweet?.card?.binding_values?.thumbnail_image_large?.image_value.url && (
+          <img
+            src={
+              // @ts-expect-error - The `card` property is not properly typed
+              tweet.card.binding_values.thumbnail_image_large.image_value.url
+            }
+            className="h-64 rounded-xl border object-cover shadow-sm"
+            alt={tweet.text}
+          />
+        )}
+    </div>
+  );
+};
 
 export const MagicTweet = ({
   tweet,
@@ -246,40 +251,32 @@ export const MagicTweet = ({
   );
 };
 
-
 /**
  * TweetCard (Server Side Only)
  */
-/*
- export default async function TweetCard({
-   id,
-   components,
-   fallback = <TweetSkeleton />,
-   onError,
-   ...props
- }: TweetProps & { className?: string }): Promise<JSX.Element> {
-   const tweet = id
-     ? await getTweet(id).catch((err) => {
-         if (onError) {
-           onError(err);
-         } else {
-           console.error(err);
-         }
-       })
-     : undefined;
+export const TweetCard = async ({
+  id,
+  components,
+  fallback = <TweetSkeleton />,
+  onError,
+  ...props
+}: TweetProps & {
+  className?: string;
+}) => {
+  const tweet = id
+    ? await getTweet(id).catch((err) => {
+        if (onError) {
+          onError(err);
+        } else {
+          console.error(err);
+        }
+      })
+    : undefined;
 
-   if (!tweet) {
-     const NotFound = components?.TweetNotFound || TweetNotFound;
-     return <NotFound {...props} />;
-   }
-
-   return (
-     <Suspense fallback={fallback}>
-       <MagicTweet tweet={tweet} {...props} />
-     </Suspense>
-   );
- }
-
+  if (!tweet) {
+    const NotFound = components?.TweetNotFound || TweetNotFound;
+    return <NotFound {...props} />;
+  }
 
   return (
     <Suspense fallback={fallback}>
@@ -287,6 +284,3 @@ export const MagicTweet = ({
     </Suspense>
   );
 };
-
-
-*/

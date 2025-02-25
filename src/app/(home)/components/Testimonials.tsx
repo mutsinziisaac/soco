@@ -1,4 +1,11 @@
-export default function Testimonials() {
+import { MagicTweet } from "./twittercard";
+import { Tweet } from "react-tweet/api";
+
+interface TestimonialsProps {
+  tweets: (Tweet | null | undefined)[];
+}
+
+export default function Testimonials({ tweets }: TestimonialsProps) {
   return (
     <section
       className="py-12 bg-white overflow-hidden md:py-20 lg:py-24"
@@ -16,11 +23,8 @@ export default function Testimonials() {
         </div>
         <div className="mt-20">
           <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 ">
-            {/*
-            <AsyncTweetCard id="1892559239593312464" />
-            <AsyncTweetCard id="1892560347371852110" className="h-fit" />
-            <AsyncTweetCard id="1892559239593312464" />
-            */}
+            {tweets[0] && <MagicTweet tweet={tweets[0]} />}
+            {tweets[1] && <MagicTweet tweet={tweets[1]} className="h-fit" />}
           </div>
         </div>
       </div>
